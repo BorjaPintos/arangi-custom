@@ -1,29 +1,30 @@
 /**
  * LICENCIA LGPL:
  * 
- * Esta librería es Software Libre; Usted puede redistribuirla y/o modificarla
- * bajo los términos de la GNU Lesser General Public License (LGPL) tal y como 
- * ha sido publicada por la Free Software Foundation; o bien la versión 2.1 de 
- * la Licencia, o (a su elección) cualquier versión posterior.
+ * Esta librerï¿½a es Software Libre; Usted puede redistribuirla y/o modificarla
+ * bajo los tï¿½rminos de la GNU Lesser General Public License (LGPL) tal y como 
+ * ha sido publicada por la Free Software Foundation; o bien la versiï¿½n 2.1 de 
+ * la Licencia, o (a su elecciï¿½n) cualquier versiï¿½n posterior.
  * 
- * Esta librería se distribuye con la esperanza de que sea útil, pero SIN 
- * NINGUNA GARANTÍA; tampoco las implícitas garantías de MERCANTILIDAD o 
- * ADECUACIÓN A UN PROPÓSITO PARTICULAR. Consulte la GNU Lesser General Public 
- * License (LGPL) para más detalles
+ * Esta librerï¿½a se distribuye con la esperanza de que sea ï¿½til, pero SIN 
+ * NINGUNA GARANTï¿½A; tampoco las implï¿½citas garantï¿½as de MERCANTILIDAD o 
+ * ADECUACIï¿½N A UN PROPï¿½SITO PARTICULAR. Consulte la GNU Lesser General Public 
+ * License (LGPL) para mï¿½s detalles
  * 
  * Usted debe recibir una copia de la GNU Lesser General Public License (LGPL) 
- * junto con esta librería; si no es así, escriba a la Free Software Foundation 
- * Inc. 51 Franklin Street, 5º Piso, Boston, MA 02110-1301, USA o consulte
+ * junto con esta librerï¿½a; si no es asï¿½, escriba a la Free Software Foundation 
+ * Inc. 51 Franklin Street, 5ï¿½ Piso, Boston, MA 02110-1301, USA o consulte
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011 Agencia de Tecnología y Certificación Electrónica
+ * Copyright 2011 Agencia de Tecnologï¿½a y Certificaciï¿½n Electrï¿½nica
  */
 package es.accv.arangi.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,30 +39,30 @@ import es.accv.arangi.exception.ResourceNotLoadedException;
 
 /**
  * Utilidades para Arangi.<br>
- * Los métodos que implican leer recursos del classpath (certificados o ficheros) buscan
+ * Los mï¿½todos que implican leer recursos del classpath (certificados o ficheros) buscan
  * dichos recursos en el paquete es.accv.arangi.resource.user. Si en este paquete no 
- * encuentran o no pueden cargar el recurso, entonces lo buscarán en es.accv.arangi.resource.arangi
- * donde se sitúan los recursos por defecto de la API.
+ * encuentran o no pueden cargar el recurso, entonces lo buscarï¿½n en es.accv.arangi.resource.arangi
+ * donde se sitï¿½an los recursos por defecto de la API.
  * 
- * @author <a href="mailto:jgutierrez@accv.es">José M Gutiérrez</a>
+ * @author <a href="mailto:jgutierrez@accv.es">Josï¿½ M Gutiï¿½rrez</a>
  */
 public class ArangiUtil {
 
 	static Logger logger = Logger.getLogger(ArangiUtil.class);
 	
 	/*
-	 * Formateador de fechas simples en español
+	 * Formateador de fechas simples en espaï¿½ol
 	 */
 	public static final SimpleDateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
 	
 	/*
-	 * Primer lugar donde se buscarán los ficheros. Este lugar no existe en la librería
-	 * y está hecho para que los usuarios puedan desplegar sus propios ficheros.
+	 * Primer lugar donde se buscarï¿½n los ficheros. Este lugar no existe en la librerï¿½a
+	 * y estï¿½ hecho para que los usuarios puedan desplegar sus propios ficheros.
 	 */
 	private static final String PRIMARY_FILES_REPOSITORY_PACKAGE	= "es/accv/arangi/resource/user";
 	
 	/*
-	 * Segundo lugar donde se buscarán los ficheros. Pertenece a la librería y sería el
+	 * Segundo lugar donde se buscarï¿½n los ficheros. Pertenece a la librerï¿½a y serï¿½a el
 	 * lugar por defecto.
 	 */
 	private static final String SECONDARY_FILES_REPOSITORY_PACKAGE	= "es/accv/arangi/resource/arangi";
@@ -69,12 +70,12 @@ public class ArangiUtil {
 	/*
 	 * Tabla que contiene los certificados descargados
 	 */
-	private static HashMap hmCACertificates = new HashMap();
+	private static HashMap<String, X509Certificate> hmCACertificates = new HashMap<String, X509Certificate>();
 	
 	/*
 	 * Tabla que contiene los ficheros descargados
 	 */
-	private static HashMap hmFiles = new HashMap();
+	private static HashMap<String, byte[]> hmFiles = new HashMap<String, byte[]>();
 	
 	/**
 	 * Obtiene uno de los certificados de la CA que se encuentran dentro del classpath.
@@ -88,7 +89,7 @@ public class ArangiUtil {
 		logger.debug ("[ArangiUtil.loadCertificate]::Obteniendo el certificado para '" + name + "'");
 		
 		if (hmCACertificates.containsKey(name)) {
-			return (X509Certificate)hmCACertificates.get(name);
+			return hmCACertificates.get(name);
 		}
 		
 	    try {
@@ -113,6 +114,36 @@ public class ArangiUtil {
 		}
 
 	}
+	
+	/**
+	 * Obtiene uno de los certificados de la CA que se encuentran en un fichero.
+	 * 
+	 * @param name Nombre del certificado
+	 * @return Certificado
+	 * @throws Exception 
+	 */
+	public static X509Certificate loadCertificate (String name, String folderPath) throws CertificateCANotFoundException {
+		
+		logger.debug ("[ArangiUtil.loadCertificate]::Obteniendo el certificado para '" + name + "'");
+		
+		if (hmCACertificates.containsKey(name)) {
+			return hmCACertificates.get(name);
+		}
+		
+		//-- Probamos en el segundo lugar
+		try {
+	    	String file = folderPath + "/" + name + ".cer";
+	    	InputStream is = new FileInputStream(new File(file));
+			X509Certificate certificate = Util.getCertificate(is);
+			hmCACertificates.put(name, certificate);
+			return certificate;
+		} catch (Exception e2) {
+			logger.info ("[ArangiUtil.loadCertificate]::No se encuentra el certificado '" + name + "'", e2);
+			throw new CertificateCANotFoundException ("No se encuentra el certificado '" + name + "'", e2);
+		}
+
+	}
+	
 
 	/**
 	 * Obtiene ficheros que se encuentran dentro del classpath.
@@ -125,7 +156,7 @@ public class ArangiUtil {
 		logger.debug ("[ArangiUtil.loadFile]::Obteniendo el fichero '" + fileName + "'");
 		
 		if (hmFiles.containsKey(fileName)) {
-			return (byte[])hmFiles.get(fileName);
+			return hmFiles.get(fileName);
 		}
 		
 	    try {
@@ -152,8 +183,8 @@ public class ArangiUtil {
 
 	/**
 	 * Obtiene la lista de certificados de CA que contiene todos los certificados
-	 * de las CAs de la ACCV, tanto las de explotación como las de test. Además
-	 * incluye un fichero de validación XML que incluye las URLs del OCSP de test
+	 * de las CAs de la ACCV, tanto las de explotaciï¿½n como las de test. Ademï¿½s
+	 * incluye un fichero de validaciï¿½n XML que incluye las URLs del OCSP de test
 	 * que no se encuentran dentro de los certificados de test.
 	 * 
 	 * @return CAList de la ACCV
@@ -162,51 +193,14 @@ public class ArangiUtil {
 		
 		logger.debug ("[ArangiUtil.getACCVCaList]::Entrada");
 		
-		List lCACertificates = new ArrayList ();
-		try {
-			//-- CA Baltimore
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/CAGVA"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/TEST_CATEST"));
-			
-			//-- CA Antigua
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ROOT_CA"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA1"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA2"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/TEST_ROOT_EJBCA"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/TEST_SUBCA_WINDOWS3"));
-			
-			//-- CA Nueva
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCVRAIZ1"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA110-SHA1"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA110-SHA256"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA120-SHA1"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA120-SHA256"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA130-SHA1"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCV-CA130-SHA256"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ROOTEJB4TEST"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCVCATEST110"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCVCATEST120"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACCVCATEST130"));
-			
-			//-- DNIe
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACRAIZ-SHA2"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACDNIE001-SHA2"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACDNIE002-SHA2"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACDNIE003-SHA2"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACDNIE004-SHA2"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACDNIE005-SHA2"));
-			lCACertificates.add(ArangiUtil.loadCertificate("certificate/ACDNIE006-SHA2"));
-			
-		} catch (CertificateCANotFoundException e) {
-			logger.info("[ArangiUtil.getACCVCaList]::No se encuentra alguno de los certificados de la ACCV", e);
-		}
+		List<X509Certificate> lCACertificates = BBDDCerts.getInstance().getCertificatesCA();
 
 		try {
 			CAList caList = new CAList (lCACertificates);
 			caList.setValidationXML(ArangiUtil.loadFile("file/validation_data_accv.xml"));
 			return caList;
 		} catch (NormalizeCertificateException e) {
-			logger.info("[ArangiUtil.getACCVCaList]::Alguno de los certificados de la ACCV no está normalizado", e);
+			logger.info("[ArangiUtil.getACCVCaList]::Alguno de los certificados de la ACCV no estï¿½ normalizado", e);
 			return null;
 		} catch (ValidationXMLException e) {
 			logger.info("[ArangiUtil.getACCVCaList]::El fichero validation.xml no tiene el formato correcto", e);

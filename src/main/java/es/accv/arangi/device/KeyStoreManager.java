@@ -1,22 +1,6 @@
-/**
- * LICENCIA LGPL:
- * 
- * Esta librería es Software Libre; Usted puede redistribuirla y/o modificarla
- * bajo los términos de la GNU Lesser General Public License (LGPL) tal y como 
- * ha sido publicada por la Free Software Foundation; o bien la versión 2.1 de 
- * la Licencia, o (a su elección) cualquier versión posterior.
- * 
- * Esta librería se distribuye con la esperanza de que sea útil, pero SIN 
- * NINGUNA GARANTÍA; tampoco las implícitas garantías de MERCANTILIDAD o 
- * ADECUACIÓN A UN PROPÓSITO PARTICULAR. Consulte la GNU Lesser General Public 
- * License (LGPL) para más detalles
- * 
- * Usted debe recibir una copia de la GNU Lesser General Public License (LGPL) 
- * junto con esta librería; si no es así, escriba a la Free Software Foundation 
- * Inc. 51 Franklin Street, 5º Piso, Boston, MA 02110-1301, USA o consulte
- * <http://www.gnu.org/licenses/>.
- *
- * Copyright 2011 Agencia de Tecnología y Certificación Electrónica
+/*
+ * 17-abr-2018 - File: - KeyStoreManager.java
+ * Author: Borja Pintos Castro - borjapintoscastro@gmail.com
  */
 package es.accv.arangi.device;
 
@@ -49,54 +33,77 @@ import es.accv.arangi.certificate.CertificadoEmpleadoPublico;
 import es.accv.arangi.certificate.CertificadoEntidad;
 
 /**
- * Clase para el manejo de keystores de la ACCV (Ficheros PKCS#12 que se entregan
- * a los ciudadanos).<br><br>
- * 
- * Ejemplo de uso:<br><br>
- * 
- * <code>
- *  IDocument document = new FileDocument(new File ("/documento.txt"));<br>
- * 	KeyStoreManager manager = new KeyStoreManager (new File ("/keystores/ks.pk12"), "1234");<br>
- *  System.out.println ("Certificate: " + manager.getCertificate());<br>
- * 	System.out.println ("Firma: " + manager.signDocument(document));
- * </code>
- * 
- * @author <a href="mailto:jgutierrez@accv.es">José M Gutiérrez</a>
+ * The Class KeyStoreManager.
  */
 public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager implements ACCVDeviceManager {
 
+	/** The logger. */
 	/*
 	 * Logger de la clase
 	 */
 	static Logger logger = Logger.getLogger(KeyStoreManager.class);
+	
+	/** The custom aliases. */
+	private CustomAliases customAliases = null;
 
 	/**
- 	 * Inicializa un gestor de KeyStore con el fichero pasado como parámetro.
- 	 * 
-	 * @param ksFile Fichero del Keystore (PKCS#12 o JKS)
-	 * @param pin PIN del dispositivo
-	 * @throws DeviceNotFoundException El fichero no existe
-	 * @throws ClosingStreamException No se ha podido cerrar correctamente el stream de lectura
-	 *  del fichero
-	 * @throws OpeningDeviceException Error no controlado abriendo el dispositivo
-	 * @throws IncorrectPINException El PIN proporcionado para abrir el dispositivo no es correcto
+	 * Instantiates a new key store manager.
+	 *
+	 * @param ksFile the ks file
+	 * @param pin the pin
+	 * @throws DeviceNotFoundException the device not found exception
+	 * @throws ClosingStreamException the closing stream exception
+	 * @throws OpeningDeviceException the opening device exception
+	 * @throws IncorrectPINException the incorrect PIN exception
 	 */
 	public KeyStoreManager(File ksFile, String pin) throws DeviceNotFoundException, ClosingStreamException, OpeningDeviceException, IncorrectPINException {
 		super(ksFile, pin);
 	}
+	
+	/**
+	 * Instantiates a new key store manager.
+	 *
+	 * @param ksFile the ks file
+	 * @param pin the pin
+	 * @param customAliases the custom aliases
+	 * @throws DeviceNotFoundException the device not found exception
+	 * @throws ClosingStreamException the closing stream exception
+	 * @throws OpeningDeviceException the opening device exception
+	 * @throws IncorrectPINException the incorrect PIN exception
+	 */
+	public KeyStoreManager(File ksFile, String pin, CustomAliases customAliases) throws DeviceNotFoundException, ClosingStreamException, OpeningDeviceException, IncorrectPINException {
+		this(ksFile, pin);
+		this.customAliases = customAliases;
+	}
 
 	/**
- 	 * Inicializa un gestor de KeyStores mediante un stream al fichero
- 	 * 
-	 * @param is Stream de lectura al fichero del Keystore (PKCS#12 o JKS)
-	 * @param pin PIN del dispositivo
-	 * @throws DeviceNotFoundException El stream de lectura pasado como parámetro es nulo
-	 * @throws ReadingStreamException Error leyendo el stream de lectura
-	 * @throws OpeningDeviceException Error no controlado abriendo el dispositivo
-	 * @throws IncorrectPINException El PIN proporcionado para abrir el dispositivo no es correcto
+	 * Instantiates a new key store manager.
+	 *
+	 * @param is the is
+	 * @param pin the pin
+	 * @throws DeviceNotFoundException the device not found exception
+	 * @throws ReadingStreamException the reading stream exception
+	 * @throws OpeningDeviceException the opening device exception
+	 * @throws IncorrectPINException the incorrect PIN exception
 	 */
 	public KeyStoreManager(InputStream is, String pin) throws DeviceNotFoundException, ReadingStreamException, OpeningDeviceException, IncorrectPINException {
 		super(is, pin);
+	}
+	
+	/**
+	 * Instantiates a new key store manager.
+	 *
+	 * @param is the is
+	 * @param pin the pin
+	 * @param customAliases the custom aliases
+	 * @throws DeviceNotFoundException the device not found exception
+	 * @throws ReadingStreamException the reading stream exception
+	 * @throws OpeningDeviceException the opening device exception
+	 * @throws IncorrectPINException the incorrect PIN exception
+	 */
+	public KeyStoreManager(InputStream is, String pin, CustomAliases customAliases) throws DeviceNotFoundException, ReadingStreamException, OpeningDeviceException, IncorrectPINException {
+		this(is, pin);
+		this.customAliases = customAliases;
 	}
 
 	
@@ -111,7 +118,7 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 		try {
 			return signDocument(document, getSignatureAlias(), DigitalSignatureAlgorithm.SHA1_RSA);
 		} catch (AliasNotFoundException e) {
-			// Esta excepción no se puede dar
+			// Esta excepciï¿½n no se puede dar
 			logger.info("[Pkcs11Manager.signDocument]::No se puede obtener la clave de firma");
 			throw new LoadingObjectException ("No se puede obtener la clave de firma");
 		}
@@ -127,7 +134,7 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 		try {
 			return signDocument(document, getSignatureAlias(), DigitalSignatureAlgorithm.SHA1_RSA);
 		} catch (AliasNotFoundException e) {
-			// Esta excepción no se puede dar
+			// Esta excepciï¿½n no se puede dar
 			logger.info("[Pkcs11Manager.signDocument]::No se puede obtener la clave de firma");
 			throw new LoadingObjectException ("No se puede obtener la clave de firma");
 		}
@@ -143,7 +150,7 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 		try {
 			return signBytesHash(hash, getSignatureAlias());
 		} catch (AliasNotFoundException e) {
-			// Esta excepción no se puede dar
+			// Esta excepciï¿½n no se puede dar
 			logger.info("[Pkcs11Manager.signHash]::No se puede obtener la clave de firma");
 			throw new LoadingObjectException ("No se puede obtener la clave de firma");
 		}
@@ -156,17 +163,17 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 		
 		String[] aliases = getAliasNamesList();
 		if (aliases == null || aliases.length == 0) {
-			logger.info("[KeyStoremanager.getSignatureAlias]::El dispositivo está vacío");
-			throw new LoadingObjectException ("El dispositivo está vacío");
+			logger.info("[KeyStoremanager.getSignatureAlias]::El dispositivo estï¿½ vacï¿½o");
+			throw new LoadingObjectException ("El dispositivo estï¿½ vacï¿½o");
 		}
 		
-		List lAlias = Arrays.asList(aliases);
+		List<String> lAlias = Arrays.asList(aliases);
 		if (lAlias.contains(CertificadoCiudadano.ALIAS_KEYSTORE_FIRMA)) {
 			logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de firma para certificado de ciudadano");
 			return CertificadoCiudadano.ALIAS_KEYSTORE_FIRMA;
 		}
 		if (lAlias.contains(CertificadoEmpleadoPublico.ALIAS_PKCS11)) {
-			logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de firma para empleado público");
+			logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de firma para empleado pï¿½blico");
 			return CertificadoEmpleadoPublico.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoEntidad.ALIAS_PKCS11)) {
@@ -177,8 +184,14 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 			logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de firma para DNIe");
 			return CertificadoDNIe.ALIAS_PKCS11_FIRMA;
 		}
+		if (customAliases != null && customAliases.getSignatureAlias() != null){
+			if (lAlias.contains(customAliases.getSignatureAlias())){
+				logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de firma para customAlias");
+				return customAliases.getSignatureAlias();
+			}
+		}
 		
-		logger.debug ("[KeyStoremanager.getSignatureAlias]::No se ha encontrado ningún alias conocido. Se devuelve el primero::" + aliases[0]);
+		logger.debug ("[KeyStoremanager.getSignatureAlias]::No se ha encontrado ningï¿½n alias conocido. Se devuelve el primero::" + aliases[0]);
 		return aliases[0];
 	}
 
@@ -189,17 +202,17 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 		
 		String[] aliases = getAliasNamesList();
 		if (aliases == null || aliases.length == 0) {
-			logger.info("[KeyStoremanager.getCipherAlias]::El dispositivo está vacío");
-			throw new LoadingObjectException ("El dispositivo está vacío");
+			logger.info("[KeyStoremanager.getCipherAlias]::El dispositivo estï¿½ vacï¿½o");
+			throw new LoadingObjectException ("El dispositivo estï¿½ vacï¿½o");
 		}
 		
-		List lAlias = Arrays.asList(aliases);
+		List<String> lAlias = Arrays.asList(aliases);
 		if (lAlias.contains(CertificadoCiudadano.ALIAS_KEYSTORE_CIFRADO)) {
 			logger.debug ("[KeyStoremanager.getCipherAlias]::Encontrado alias de cifrado para certificado de ciudadano");
 			return CertificadoCiudadano.ALIAS_KEYSTORE_CIFRADO;
 		}
 		if (lAlias.contains(CertificadoEmpleadoPublico.ALIAS_PKCS11)) {
-			logger.debug ("[KeyStoremanager.getCipherAlias]::Encontrado alias de cifrado para empleado público");
+			logger.debug ("[KeyStoremanager.getCipherAlias]::Encontrado alias de cifrado para empleado pï¿½blico");
 			return CertificadoEmpleadoPublico.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoEntidad.ALIAS_PKCS11)) {
@@ -210,8 +223,14 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 			logger.debug ("[KeyStoremanager.getCipherAlias]::Encontrado alias de cifrado para DNIe");
 			return CertificadoDNIe.ALIAS_PKCS11_FIRMA;
 		}
+		if (customAliases != null && customAliases.getCipherAlias() != null){
+			if (lAlias.contains(customAliases.getCipherAlias())){
+				logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de cifrado para customAlias");
+				return customAliases.getCipherAlias();
+			}
+		}
 		
-		logger.debug ("[KeyStoremanager.getCipherAlias]::No se ha encontrado ningún alias conocido. Se devuelve el primero::" + aliases[0]);
+		logger.debug ("[KeyStoremanager.getCipherAlias]::No se ha encontrado ningï¿½n alias conocido. Se devuelve el primero::" + aliases[0]);
 		return aliases[0];
 	}
 	
@@ -222,29 +241,35 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 		
 		String[] aliases = getAliasNamesList();
 		if (aliases == null || aliases.length == 0) {
-			logger.info("[KeyStoremanager.getAuthenticationAlias]::El dispositivo está vacío");
-			throw new LoadingObjectException ("El dispositivo está vacío");
+			logger.info("[KeyStoremanager.getAuthenticationAlias]::El dispositivo estï¿½ vacï¿½o");
+			throw new LoadingObjectException ("El dispositivo estï¿½ vacï¿½o");
 		}
 		
-		List lAlias = Arrays.asList(aliases);
+		List<String> lAlias = Arrays.asList(aliases);
 		if (lAlias.contains(CertificadoCiudadano.ALIAS_KEYSTORE_FIRMA)) {
-			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticación para certificado de ciudadano");
+			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para certificado de ciudadano");
 			return CertificadoCiudadano.ALIAS_KEYSTORE_FIRMA;
 		}
 		if (lAlias.contains(CertificadoEmpleadoPublico.ALIAS_PKCS11)) {
-			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticación para empleado público");
+			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para empleado pï¿½blico");
 			return CertificadoEmpleadoPublico.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoEntidad.ALIAS_PKCS11)) {
-			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticación para entidades");
+			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para entidades");
 			return CertificadoEntidad.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoDNIe.ALIAS_PKCS11_AUTENTICACION)) {
-			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticación para DNIe");
+			logger.debug ("[KeyStoremanager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para DNIe");
 			return CertificadoDNIe.ALIAS_PKCS11_AUTENTICACION;
 		}
+		if (customAliases != null && customAliases.getAuthenticationAlias() != null){
+			if (lAlias.contains(customAliases.getAuthenticationAlias())){
+				logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de autenticaciï¿½n para customAlias");
+				return customAliases.getAuthenticationAlias();
+			}
+		}
 		
-		logger.debug ("[KeyStoremanager.getAuthenticationAlias]::No se ha encontrado ningún alias conocido. Se devuelve el primero::" + aliases[0]);
+		logger.debug ("[KeyStoremanager.getAuthenticationAlias]::No se ha encontrado ningï¿½n alias conocido. Se devuelve el primero::" + aliases[0]);
 		return aliases[0];
 	}
 
@@ -270,18 +295,18 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 	}
 		
 	/**
-	   * Crea un fichero PKCS#12 vacío
-	   * 
-	   * @param storeType Tipo de keystore (STORE_TYPE_JKS o STORE_TYPE_PKCS12 de la clase KeyStoreManager de Arangí Base)
-	   * @param pin Contraseña del keystore
-	   * @return Manager al keystore recien creado
-	   * @throws OpeningDeviceException Excepciones creando y serializando el keystore
-	   */
+	 * Gets the empty key store.
+	 *
+	 * @param storeType the store type
+	 * @param pin the pin
+	 * @return the empty key store
+	 * @throws OpeningDeviceException the opening device exception
+	 */
 	public static KeyStoreManager getEmptyKeyStore(String storeType, String pin)throws OpeningDeviceException {
 
 		logger.info("[KeyStoreManager.getEmptyKeyStore]::Entrada::" + Arrays.asList (new Object[] { storeType }));
 		
-		//-- Utilizar el método de la clase base para generar un keystore 
+		//-- Utilizar el mï¿½todo de la clase base para generar un keystore 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try {
 			es.accv.arangi.base.device.KeyStoreManager.getEmptyKeyStore(storeType, pin).save(baos);
@@ -298,7 +323,7 @@ public class KeyStoreManager extends es.accv.arangi.base.device.KeyStoreManager 
 		} 
 	}
 
-	//-- Métodos privados
+	//-- Mï¿½todos privados
 	
 	
 }

@@ -1,22 +1,22 @@
 /**
  * LICENCIA LGPL:
  * 
- * Esta librería es Software Libre; Usted puede redistribuirla y/o modificarla
- * bajo los términos de la GNU Lesser General Public License (LGPL) tal y como 
- * ha sido publicada por la Free Software Foundation; o bien la versión 2.1 de 
- * la Licencia, o (a su elección) cualquier versión posterior.
+ * Esta librerï¿½a es Software Libre; Usted puede redistribuirla y/o modificarla
+ * bajo los tï¿½rminos de la GNU Lesser General Public License (LGPL) tal y como 
+ * ha sido publicada por la Free Software Foundation; o bien la versiï¿½n 2.1 de 
+ * la Licencia, o (a su elecciï¿½n) cualquier versiï¿½n posterior.
  * 
- * Esta librería se distribuye con la esperanza de que sea útil, pero SIN 
- * NINGUNA GARANTÍA; tampoco las implícitas garantías de MERCANTILIDAD o 
- * ADECUACIÓN A UN PROPÓSITO PARTICULAR. Consulte la GNU Lesser General Public 
- * License (LGPL) para más detalles
+ * Esta librerï¿½a se distribuye con la esperanza de que sea ï¿½til, pero SIN 
+ * NINGUNA GARANTï¿½A; tampoco las implï¿½citas garantï¿½as de MERCANTILIDAD o 
+ * ADECUACIï¿½N A UN PROPï¿½SITO PARTICULAR. Consulte la GNU Lesser General Public 
+ * License (LGPL) para mï¿½s detalles
  * 
  * Usted debe recibir una copia de la GNU Lesser General Public License (LGPL) 
- * junto con esta librería; si no es así, escriba a la Free Software Foundation 
- * Inc. 51 Franklin Street, 5º Piso, Boston, MA 02110-1301, USA o consulte
+ * junto con esta librerï¿½a; si no es asï¿½, escriba a la Free Software Foundation 
+ * Inc. 51 Franklin Street, 5ï¿½ Piso, Boston, MA 02110-1301, USA o consulte
  * <http://www.gnu.org/licenses/>.
  *
- * Copyright 2011 Agencia de Tecnología y Certificación Electrónica
+ * Copyright 2011 Agencia de Tecnologï¿½a y Certificaciï¿½n Electrï¿½nica
  */
 package es.accv.arangi.device;
 
@@ -65,13 +65,13 @@ import es.accv.arangi.device.model.Pkcs11TYSManufacturer;
  * Clase de manejo de dispositivos PKCS#11 (tarjetas inteligentes) usados 
  * por la ACCV.
  * 
- * En los casos en que Arangi se encargue de buscar los módulos con los que
- * trabajan las tarjetas, ésta es la lista de módulos que buscará:
+ * En los casos en que Arangi se encargue de buscar los mï¿½dulos con los que
+ * trabajan las tarjetas, ï¿½sta es la lista de mï¿½dulos que buscarï¿½:
  * <ul>
- * 	<li><i>aetpkss1</i>: módulo para tarjetas GyD</li>
- * 	<li><i>CardOS_PKCS11</i>: módulo para tarjetas Siemens antiguas</li>
- * 	<li><i>siecap11</i>: módulo para tarjetas Siemene nuevas</li>
- * 	<li><i>AdvantisPKCS11</i>: módulo para tarjetas Sermepa</li>
+ * 	<li><i>aetpkss1</i>: mï¿½dulo para tarjetas GyD</li>
+ * 	<li><i>CardOS_PKCS11</i>: mï¿½dulo para tarjetas Siemens antiguas</li>
+ * 	<li><i>siecap11</i>: mï¿½dulo para tarjetas Siemene nuevas</li>
+ * 	<li><i>AdvantisPKCS11</i>: mï¿½dulo para tarjetas Sermepa</li>
  * </ul><br>
  * 
  * Ejemplo de uso:<br><br>
@@ -82,7 +82,7 @@ import es.accv.arangi.device.model.Pkcs11TYSManufacturer;
  * 	System.out.println ("Firma: " + manager.signDocument(document)); // Obtener los bytes de la firma
  * </code>
  * 
- * @author <a href="mailto:jgutierrez@accv.es">José M Gutiérrez</a>
+ * @author <a href="mailto:jgutierrez@accv.es">Josï¿½ M Gutiï¿½rrez</a>
  */
 public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager implements ACCVDeviceManager {
 
@@ -91,21 +91,23 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 	 */
 	Logger logger = Logger.getLogger(Pkcs11Manager.class);
 	
+	private CustomAliases customAliases = null;
+	
 	//-- Constructores
 
 	/**
 	 * Inicializa un gestor de PKCS#11 realizando previamente un proceso de 
-	 * autodetección de la tarjeta insertada el lector de acuerdo a los módulos
+	 * autodetecciï¿½n de la tarjeta insertada el lector de acuerdo a los mï¿½dulos
 	 * tratados por Arangi. En caso de que hayan varios dispositivos conectados 
-	 * se elegirá el primero de ellos, por lo que este método está recomendado
-	 * para usarlo en el caso más habitual: que sólo exista un dispositivo 
+	 * se elegirï¿½ el primero de ellos, por lo que este mï¿½todo estï¿½ recomendado
+	 * para usarlo en el caso mï¿½s habitual: que sï¿½lo exista un dispositivo 
 	 * PKCS#11 conectado.
 	 * 
 	 * @param pin PIN para abrir el dispositivo
-	 * @throws ModuleNotFoundException No se ha encontrado ningún módulo PKCS#11
+	 * @throws ModuleNotFoundException No se ha encontrado ningï¿½n mï¿½dulo PKCS#11
 	 * 	de la lista de los utilizados por la ACCV instalado en el equipo.
 	 * @throws IncorrectPINException El PIN no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
 	 * 	lo que no se puede trabajar con dispositivos PKCS#11
@@ -114,24 +116,32 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 	public Pkcs11Manager(String pin) throws ModuleNotFoundException, IncorrectPINException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException {
 		super(pin, getManufacturers());
 	}
+	
+	/**
+	 *  Lo mismo que el metodo Pkcs11Manager(String pin), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(String pin, CustomAliases customAliases) throws ModuleNotFoundException, IncorrectPINException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException {
+		this(pin);
+		this.customAliases = customAliases;
+	}
 
 	/**
 	 * Inicializa un gestor de PKCS#11 realizando previamente un proceso de 
-	 * autodetección de la tarjeta insertada el lector de acuerdo a los módulos
+	 * autodetecciï¿½n de la tarjeta insertada el lector de acuerdo a los mï¿½dulos
 	 * tratados por Arangi. En caso de que hayan varios dispositivos conectados 
-	 * se elegirá el primero de ellos, por lo que este método está recomendado
-	 * para usarlo en el caso más habitual: que sólo exista un dispositivo 
+	 * se elegirï¿½ el primero de ellos, por lo que este mï¿½todo estï¿½ recomendado
+	 * para usarlo en el caso mï¿½s habitual: que sï¿½lo exista un dispositivo 
 	 * PKCS#11 conectado.
 	 * 
 	 * @param password PIN o PUK para abrir el dispositivo
-	 * @param isPUK Determina si el primer parámetro es el PIN o el PUK
+	 * @param isPUK Determina si el primer parï¿½metro es el PIN o el PUK
 	 * @param withKeystore Indica si se quiere cargar el keystore interno de firma.
 	 * 	Si se va a utilizar el manager para actualizar el contenido o modificar el
-	 *  PIN o el PUK es más optimo marcar este parámetro a falso.
-	 * @throws ModuleNotFoundException No se ha encontrado ningún módulo PKCS#11
+	 *  PIN o el PUK es mï¿½s optimo marcar este parï¿½metro a falso.
+	 * @throws ModuleNotFoundException No se ha encontrado ningï¿½n mï¿½dulo PKCS#11
 	 * 	de la lista de los utilizados por la ACCV instalado en el equipo.
 	 * @throws IncorrectPINException El PIN no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
 	 * 	lo que no se puede trabajar con dispositivos PKCS#11
@@ -141,22 +151,30 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 	public Pkcs11Manager(String password, boolean isPUK, boolean withKeystore) throws ModuleNotFoundException, IncorrectPINException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException, IncorrectPUKException {
 		super(password, isPUK, getManufacturers(), withKeystore);
 	}
+	
+	/**
+	 *  Lo mismo que el metodo Pkcs11Manager(String password, boolean isPUK, boolean withKeystore), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(String password, boolean isPUK, boolean withKeystore, CustomAliases customAliases) throws ModuleNotFoundException, IncorrectPINException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException, IncorrectPUKException {
+		this(password, isPUK, withKeystore);
+		this.customAliases = customAliases;
+	}
 
 	/**
 	 * Inicializa un gestor de PKCS#11 realizando previamente un proceso de 
-	 * autodetección de la tarjeta insertada el lector de acuerdo a los módulos
+	 * autodetecciï¿½n de la tarjeta insertada el lector de acuerdo a los mï¿½dulos
 	 * tratados por Arangi. En caso de que hayan varios dispositivos conectados 
-	 * se elegirá el primero de ellos, por lo que este método está recomendado
-	 * para usarlo en el caso más habitual: que sólo exista un dispositivo 
+	 * se elegirï¿½ el primero de ellos, por lo que este mï¿½todo estï¿½ recomendado
+	 * para usarlo en el caso mï¿½s habitual: que sï¿½lo exista un dispositivo 
 	 * PKCS#11 conectado.
 	 * 
 	 * @param password PIN o PUK para abrir el dispositivo
-	 * @param isPUK Determina si el primer parámetro es el PIN o el PUK
-	 * @throws ModuleNotFoundException No se ha encontrado ningún módulo PKCS#11
+	 * @param isPUK Determina si el primer parï¿½metro es el PIN o el PUK
+	 * @throws ModuleNotFoundException No se ha encontrado ningï¿½n mï¿½dulo PKCS#11
 	 * 	de la lista de los utilizados por la ACCV instalado en el equipo.
 	 * @throws IncorrectPINException El PIN no es correcto
 	 * @throws IncorrectPUKException El PUK no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
 	 * 	lo que no se puede trabajar con dispositivos PKCS#11
@@ -165,20 +183,28 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 	public Pkcs11Manager(String password, boolean isPUK) throws ModuleNotFoundException, IncorrectPINException,	IncorrectPUKException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException {
 		super(password, isPUK, getManufacturers());
 	}
+	
+	/**
+	 *  Lo mismo que el metodo Pkcs11Manager(String password, boolean isPUK), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(String password, boolean isPUK, CustomAliases customAliases) throws ModuleNotFoundException, IncorrectPINException,	IncorrectPUKException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException {
+		this(password, isPUK);
+		this.customAliases = customAliases;
+	}
 
 	/**
-	 * Inicializa un gestor de PKCS#11 para el dispositivo pasado como parámetro.
-	 * Dicho dispositivo puede ser obtenido tras el proceso de autodetección de
-	 * todos los dispositivos PKCS#11 realizado mediante el método estático 
+	 * Inicializa un gestor de PKCS#11 para el dispositivo pasado como parï¿½metro.
+	 * Dicho dispositivo puede ser obtenido tras el proceso de autodetecciï¿½n de
+	 * todos los dispositivos PKCS#11 realizado mediante el mï¿½todo estï¿½tico 
 	 * {@link #getConnectedDevices() getConnectedDevices}. 
 	 * 
 	 * @param device Dispositivo elegido para este manager
 	 * @param pin PIN para abrir el dispositivo
 	 * 
-	 * @throws ModuleNotFoundException No se ha encontrado el módulo PKCS#11
+	 * @throws ModuleNotFoundException No se ha encontrado el mï¿½dulo PKCS#11
 	 * 	adecuado instalado en el equipo.
 	 * @throws IncorrectPINException El PIN no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws DeviceNotFoundException El dispositivo no existe
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
@@ -189,27 +215,36 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 	LockedPINException, OpeningDeviceException, DeviceNotFoundException, IAIKDLLNotFoundException, InitializeProviderException {
 		super(device, pin);
 	}
+	
+	/**
+	 *  Lo mismo que el metodo Pkcs11Manager(Pkcs11Device device, String pin), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(Pkcs11Device device, String pin, CustomAliases customAliases) throws ModuleNotFoundException, IncorrectPINException, 
+	LockedPINException, OpeningDeviceException, DeviceNotFoundException, IAIKDLLNotFoundException, InitializeProviderException {
+		this(device, pin);
+		this.customAliases = customAliases;
+	}
 
 	/**
-	 * Inicializa un gestor de PKCS#11 para el dispositivo pasado como parámetro.
-	 * Dicho dispositivo puede ser obtenido tras el proceso de autodetección de
-	 * todos los dispositivos PKCS#11 realizado mediante el método estático 
+	 * Inicializa un gestor de PKCS#11 para el dispositivo pasado como parï¿½metro.
+	 * Dicho dispositivo puede ser obtenido tras el proceso de autodetecciï¿½n de
+	 * todos los dispositivos PKCS#11 realizado mediante el mï¿½todo estï¿½tico 
 	 * {@link #getConnectedDevices() getConnectedDevices}. <br><br>
 	 * 
-	 * Si el dispositivo se abre con el PUK, normalmente el siguiente paso será
-	 * invocar al método {@link #unlockPIN(String) unlockPIN}, ya que el PUK se
+	 * Si el dispositivo se abre con el PUK, normalmente el siguiente paso serï¿½
+	 * invocar al mï¿½todo {@link #unlockPIN(String) unlockPIN}, ya que el PUK se
 	 * suele usar para desbloquear el PIN de la tarjeta. Otra forma de hacer esto
-	 * mismo en un sólo paso es llamar al método estático {@link #unlockPIN(Pkcs11Device,String,String) unlockPIN}.
+	 * mismo en un sï¿½lo paso es llamar al mï¿½todo estï¿½tico {@link #unlockPIN(Pkcs11Device,String,String) unlockPIN}.
 	 * 
 	 * @param device Dispositivo elegido para este manager
 	 * @param password PIN o PUK para abrir el dispositivo
-	 * @param isPUK Determina si el primer parámetro es el PIN o el PUK
+	 * @param isPUK Determina si el primer parï¿½metro es el PIN o el PUK
 	 * 
-	 * @throws ModuleNotFoundException No se ha encontrado el módulo PKCS#11
+	 * @throws ModuleNotFoundException No se ha encontrado el mï¿½dulo PKCS#11
 	 * 	adecuado instalado en el equipo.
 	 * @throws IncorrectPINException El PIN no es correcto
 	 * @throws IncorrectPUKException El PUK no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws DeviceNotFoundException El dispositivo no existe
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
@@ -222,30 +257,40 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 		
 		super(device, password, isPUK);
 	}
+	
+	/**
+	 *  Lo mismo que el metodo Pkcs11Manager(Pkcs11Device device, String pin), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(Pkcs11Device device, String password, boolean isPUK, CustomAliases customAliases) throws ModuleNotFoundException, 
+		IncorrectPINException, IncorrectPUKException, LockedPINException, OpeningDeviceException, DeviceNotFoundException,
+		IAIKDLLNotFoundException, InitializeProviderException {
+		this(device, password, isPUK);
+		this.customAliases = customAliases;
+	}
 
 	/**
-	 * Inicializa un gestor de PKCS#11 para el dispositivo pasado como parámetro.
-	 * Dicho dispositivo puede ser obtenido tras el proceso de autodetección de
-	 * todos los dispositivos PKCS#11 realizado mediante el método estático 
+	 * Inicializa un gestor de PKCS#11 para el dispositivo pasado como parï¿½metro.
+	 * Dicho dispositivo puede ser obtenido tras el proceso de autodetecciï¿½n de
+	 * todos los dispositivos PKCS#11 realizado mediante el mï¿½todo estï¿½tico 
 	 * {@link #getConnectedDevices() getConnectedDevices}. <br><br>
 	 * 
-	 * Si el dispositivo se abre con el PUK, normalmente el siguiente paso será
-	 * invocar al método {@link #unlockPIN(String) unlockPIN}, ya que el PUK se
+	 * Si el dispositivo se abre con el PUK, normalmente el siguiente paso serï¿½
+	 * invocar al mï¿½todo {@link #unlockPIN(String) unlockPIN}, ya que el PUK se
 	 * suele usar para desbloquear el PIN de la tarjeta. Otra forma de hacer esto
-	 * mismo en un sólo paso es llamar al método estático {@link #unlockPIN(Pkcs11Device,String,String) unlockPIN}.
+	 * mismo en un sï¿½lo paso es llamar al mï¿½todo estï¿½tico {@link #unlockPIN(Pkcs11Device,String,String) unlockPIN}.
 	 * 
 	 * @param device Dispositivo elegido para este manager
 	 * @param password PIN o PUK para abrir el dispositivo
-	 * @param isPUK Determina si el primer parámetro es el PIN o el PUK
+	 * @param isPUK Determina si el primer parï¿½metro es el PIN o el PUK
 	 * @param withKeystore Indica si se quiere cargar el keystore interno de firma.
 	 * 	Si se va a utilizar el manager para actualizar el contenido o modificar el
-	 *  PIN o el PUK es más optimo marcar este parámetro a falso.
+	 *  PIN o el PUK es mï¿½s optimo marcar este parï¿½metro a falso.
 	 * 
-	 * @throws ModuleNotFoundException No se ha encontrado el módulo PKCS#11
+	 * @throws ModuleNotFoundException No se ha encontrado el mï¿½dulo PKCS#11
 	 * 	adecuado instalado en el equipo.
 	 * @throws IncorrectPINException El PIN no es correcto
 	 * @throws IncorrectPUKException El PUK no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws DeviceNotFoundException El dispositivo no existe
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
@@ -258,21 +303,31 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 
 		initialize(device, password, isPUK, withKeystore);
 	}
+	
+	/**
+	 *  Lo mismo que el metodo Pkcs11Manager(Pkcs11Device device, String password, boolean isPUK, boolean withKeystore), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(Pkcs11Device device, String password, boolean isPUK, boolean withKeystore, CustomAliases customAliases) throws ModuleNotFoundException, 
+		IncorrectPINException, IncorrectPUKException, LockedPINException, OpeningDeviceException, 
+		DeviceNotFoundException, IAIKDLLNotFoundException, InitializeProviderException {
+		this(device, password, isPUK, withKeystore);
+		this.customAliases = customAliases;
+	}
 
 	/**
-	 * Inicializa un gestor de PKCS#11 usando la implementación del PKCS#11 
+	 * Inicializa un gestor de PKCS#11 usando la implementaciï¿½n del PKCS#11 
  	 * indicado. En caso de que hayan varios dispositivos conectados se 
- 	 * elegirá el primero de ellos. Este método se puede usar para el caso 
- 	 * más habitual: que sólo exista un dispositivo PKCS#11 conectado.
+ 	 * elegirï¿½ el primero de ellos. Este mï¿½todo se puede usar para el caso 
+ 	 * mï¿½s habitual: que sï¿½lo exista un dispositivo PKCS#11 conectado.
 	 * 
 	 * @param manufacturer Fabricante del dispositivo
 	 * @param pin PIN para abrir el dispositivo
 	 * @throws DeviceNotFoundException No existen dispositivos para la 
-	 * 	libería PKCS#11 o no existe un dispositivo para el valor de 'tokenID'.
-	 * @throws ModuleNotFoundException No se ha encontrado el módulo PKCS#11
+	 * 	liberï¿½a PKCS#11 o no existe un dispositivo para el valor de 'tokenID'.
+	 * @throws ModuleNotFoundException No se ha encontrado el mï¿½dulo PKCS#11
 	 * 	adecuado instalado en el equipo.
 	 * @throws IncorrectPINException El PIN no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
 	 * 	lo que no se puede trabajar con dispositivos PKCS#11
@@ -282,24 +337,33 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 		IncorrectPINException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException {
 		super(manufacturer, pin);
 	}
+	
+	/**
+	 *  Lo mismo que el metodo Pkcs11Manager(Pkcs11Manufacturer manufacturer, String pin), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(Pkcs11Manufacturer manufacturer, String pin, CustomAliases customAliases) throws DeviceNotFoundException, ModuleNotFoundException, 
+		IncorrectPINException, LockedPINException, OpeningDeviceException, IAIKDLLNotFoundException, InitializeProviderException {
+		this(manufacturer, pin);
+		this.customAliases = customAliases;
+	}
 
 	/**
-	 * Inicializa un gestor de PKCS#11 usando la implementación del PKCS#11 
+	 * Inicializa un gestor de PKCS#11 usando la implementaciï¿½n del PKCS#11 
  	 * indicado. En caso de que hayan varios dispositivos conectados se 
- 	 * elegirá el primero de ellos. Este método se puede usar para el caso 
- 	 * más habitual: que sólo exista un dispositivo PKCS#11 conectado.
+ 	 * elegirï¿½ el primero de ellos. Este mï¿½todo se puede usar para el caso 
+ 	 * mï¿½s habitual: que sï¿½lo exista un dispositivo PKCS#11 conectado.
 	 * 
 	 * @param manufacturer Fabricante del dispositivo
 	 * @param password PIN o PUK para abrir el dispositivo
-	 * @param isPUK Determina si el primer parámetro es el PIN o el PUK
+	 * @param isPUK Determina si el primer parï¿½metro es el PIN o el PUK
 	 * 
 	 * @throws DeviceNotFoundException No existen dispositivos para la 
-	 * 	libería PKCS#11 o no existe un dispositivo para el valor de 'tokenID'.
-	 * @throws ModuleNotFoundException No se ha encontrado el módulo PKCS#11
+	 * 	liberï¿½a PKCS#11 o no existe un dispositivo para el valor de 'tokenID'.
+	 * @throws ModuleNotFoundException No se ha encontrado el mï¿½dulo PKCS#11
 	 * 	adecuado instalado en el equipo.
 	 * @throws IncorrectPINException El PIN (o el PUK) no es correcto
 	 * @throws IncorrectPUKException El PUK no es correcto
-	 * @throws LockedPINException El PIN está bloqueado
+	 * @throws LockedPINException El PIN estï¿½ bloqueado
 	 * @throws OpeningDeviceException Error durante el proceso de apertura
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
 	 * 	lo que no se puede trabajar con dispositivos PKCS#11
@@ -309,16 +373,27 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 		ModuleNotFoundException, IncorrectPINException, IncorrectPUKException, LockedPINException, OpeningDeviceException, 
 		IAIKDLLNotFoundException, InitializeProviderException {
 		super(manufacturer, password, isPUK);
+		
 	}
-
-	//-- Métodos públicos
 	
 	/**
-	 * Método que obtiene información de los dispositivos conectados para todas
-	 * las librerías PKCS#11 definidas en Arangi
+	 *  Lo mismo que el metodo Pkcs11Manager(Pkcs11Manufacturer manufacturer, String password, boolean isPUK), pero pasandole customAliases
+	 */
+	public Pkcs11Manager(Pkcs11Manufacturer manufacturer, String password, boolean isPUK, CustomAliases customAliases) throws DeviceNotFoundException, 
+		ModuleNotFoundException, IncorrectPINException, IncorrectPUKException, LockedPINException, OpeningDeviceException, 
+		IAIKDLLNotFoundException, InitializeProviderException {
+		this(manufacturer, password, isPUK);
+		this.customAliases = customAliases;
+	}
+
+	//-- Mï¿½todos pï¿½blicos
+	
+	/**
+	 * Mï¿½todo que obtiene informaciï¿½n de los dispositivos conectados para todas
+	 * las librerï¿½as PKCS#11 definidas en Arangi
 	 * 
 	 * @return Lista de objetos es.accv.arangi.base.device.model.Pkcs11Device 
-	 * 	con	información de cada uno de los dispositivos encontrados
+	 * 	con	informaciï¿½n de cada uno de los dispositivos encontrados
 	 * @throws IAIKDLLNotFoundException No es posible cargar la DLL de IAIK, por 
 	 * 	lo que no se puede trabajar con dispositivos PKCS#11
 	 */
@@ -329,8 +404,8 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 	}
 	
 	/**
-	 * Este método trata de cargar e inicializar la lista de fabricantes PKCS#11 usados por Arangi. 
-	 * Devuelve los nombres de aquellos módulos que se encuentran disponibles 
+	 * Este mï¿½todo trata de cargar e inicializar la lista de fabricantes PKCS#11 usados por Arangi. 
+	 * Devuelve los nombres de aquellos mï¿½dulos que se encuentran disponibles 
 	 * en el equipo.
 	 * 
 	 * @return Lista de fabricantes disponibles en el equipo
@@ -352,7 +427,7 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 		try {
 			return signDocument(document, getSignatureAlias(), DigitalSignatureAlgorithm.SHA1_RSA);
 		} catch (AliasNotFoundException e) {
-			// Esta excepción no se puede dar
+			// Esta excepciï¿½n no se puede dar
 			logger.info("[Pkcs11Manager.signDocument]::No se puede obtener la clave de firma");
 			throw new LoadingObjectException ("No se puede obtener la clave de firma");
 		}
@@ -368,7 +443,7 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 		try {
 			return signDocument(document, getSignatureAlias(), DigitalSignatureAlgorithm.SHA1_RSA);
 		} catch (AliasNotFoundException e) {
-			// Esta excepción no se puede dar
+			// Esta excepciï¿½n no se puede dar
 			logger.info("[Pkcs11Manager.signDocument]::No se puede obtener la clave de firma");
 			throw new LoadingObjectException ("No se puede obtener la clave de firma");
 		}
@@ -384,7 +459,7 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 		try {
 			return signBytesHash(hash, getSignatureAlias());
 		} catch (AliasNotFoundException e) {
-			// Esta excepción no se puede dar
+			// Esta excepciï¿½n no se puede dar
 			logger.info("[Pkcs11Manager.signHash]::No se puede obtener la clave de firma");
 			throw new LoadingObjectException ("No se puede obtener la clave de firma");
 		}
@@ -403,8 +478,8 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			throw new LoadingObjectException ("No se puede obtener la lista de alias del dispositivo", e);
 		}
 		if (aliases == null || aliases.length == 0) {
-			logger.info("[Pkcs11Manager.getSignatureAlias]::El dispositivo está vacío");
-			throw new LoadingObjectException ("El dispositivo está vacío");
+			logger.info("[Pkcs11Manager.getSignatureAlias]::El dispositivo estï¿½ vacï¿½o");
+			throw new LoadingObjectException ("El dispositivo estï¿½ vacï¿½o");
 		}
 		
 		List lAlias = Arrays.asList(aliases);
@@ -413,7 +488,7 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			return CertificadoCiudadano.ALIAS_KEYSTORE_FIRMA;
 		}
 		if (lAlias.contains(CertificadoEmpleadoPublico.ALIAS_PKCS11)) {
-			logger.debug ("[Pkcs11Manager.getSignatureAlias]::Encontrado alias de firma para empleado público");
+			logger.debug ("[Pkcs11Manager.getSignatureAlias]::Encontrado alias de firma para empleado pï¿½blico");
 			return CertificadoEmpleadoPublico.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoEntidad.ALIAS_PKCS11)) {
@@ -425,7 +500,7 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			return CertificadoPertenenciaEmpresa.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoSeudonimo.ALIAS_PKCS11)) {
-			logger.debug ("[Pkcs11Manager.getSignatureAlias]::Encontrado alias de firma para seudónimo");
+			logger.debug ("[Pkcs11Manager.getSignatureAlias]::Encontrado alias de firma para seudï¿½nimo");
 			return CertificadoSeudonimo.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoRepresentante.ALIAS_PKCS11)) {
@@ -436,8 +511,14 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			logger.debug ("[Pkcs11Manager.getSignatureAlias]::Encontrado alias de firma para DNIe");
 			return CertificadoDNIe.ALIAS_PKCS11_FIRMA;
 		}
+		if (customAliases != null && customAliases.getSignatureAlias() != null){
+			if (lAlias.contains(customAliases.getSignatureAlias())){
+				logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de firma para customAlias");
+				return customAliases.getSignatureAlias();
+			}
+		}
 		
-		logger.debug ("[Pkcs11Manager.getSignatureAlias]::No se ha encontrado ningún alias conocido. Se devuelve el primero::" + aliases[0]);
+		logger.debug ("[Pkcs11Manager.getSignatureAlias]::No se ha encontrado ningï¿½n alias conocido. Se devuelve el primero::" + aliases[0]);
 		return aliases[0];
 	}
 
@@ -454,8 +535,8 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			throw new LoadingObjectException ("No se puede obtener la lista de alias del dispositivo", e);
 		}
 		if (aliases == null || aliases.length == 0) {
-			logger.info("[Pkcs11Manager.getCipherAlias]::El dispositivo está vacío");
-			throw new LoadingObjectException ("El dispositivo está vacío");
+			logger.info("[Pkcs11Manager.getCipherAlias]::El dispositivo estï¿½ vacï¿½o");
+			throw new LoadingObjectException ("El dispositivo estï¿½ vacï¿½o");
 		}
 		
 		List lAlias = Arrays.asList(aliases);
@@ -464,7 +545,7 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			return CertificadoCiudadano.ALIAS_KEYSTORE_CIFRADO;
 		}
 		if (lAlias.contains(CertificadoEmpleadoPublico.ALIAS_PKCS11)) {
-			logger.debug ("[Pkcs11Manager.getCipherAlias]::Encontrado alias de cifrado para empleado público");
+			logger.debug ("[Pkcs11Manager.getCipherAlias]::Encontrado alias de cifrado para empleado pï¿½blico");
 			return CertificadoEmpleadoPublico.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoEntidad.ALIAS_PKCS11)) {
@@ -475,8 +556,14 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			logger.debug ("[Pkcs11Manager.getCipherAlias]::Encontrado alias de cifrado para DNIe");
 			return CertificadoDNIe.ALIAS_PKCS11_FIRMA;
 		}
+		if (customAliases != null && customAliases.getCipherAlias() != null){
+			if (lAlias.contains(customAliases.getCipherAlias())){
+				logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de cifrado para customAlias");
+				return customAliases.getCipherAlias();
+			}
+		}
 		
-		logger.debug ("[Pkcs11Manager.getCipherAlias]::No se ha encontrado ningún alias conocido. Se devuelve el primero::" + aliases[0]);
+		logger.debug ("[Pkcs11Manager.getCipherAlias]::No se ha encontrado ningï¿½n alias conocido. Se devuelve el primero::" + aliases[0]);
 		return aliases[0];
 	}
 	
@@ -493,29 +580,35 @@ public class Pkcs11Manager extends es.accv.arangi.base.device.Pkcs11Manager impl
 			throw new LoadingObjectException ("No se puede obtener la lista de alias del dispositivo", e);
 		}
 		if (aliases == null || aliases.length == 0) {
-			logger.info("[Pkcs11Manager.getAuthenticationAlias]::El dispositivo está vacío");
-			throw new LoadingObjectException ("El dispositivo está vacío");
+			logger.info("[Pkcs11Manager.getAuthenticationAlias]::El dispositivo estï¿½ vacï¿½o");
+			throw new LoadingObjectException ("El dispositivo estï¿½ vacï¿½o");
 		}
 		
 		List lAlias = Arrays.asList(aliases);
 		if (lAlias.contains(CertificadoCiudadano.ALIAS_KEYSTORE_FIRMA)) {
-			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticación para certificado de ciudadano");
+			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para certificado de ciudadano");
 			return CertificadoCiudadano.ALIAS_KEYSTORE_FIRMA;
 		}
 		if (lAlias.contains(CertificadoEmpleadoPublico.ALIAS_PKCS11)) {
-			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticación para empleado público");
+			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para empleado pï¿½blico");
 			return CertificadoEmpleadoPublico.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoEntidad.ALIAS_PKCS11)) {
-			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticación para entidades");
+			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para entidades");
 			return CertificadoEntidad.ALIAS_PKCS11;
 		}
 		if (lAlias.contains(CertificadoDNIe.ALIAS_PKCS11_AUTENTICACION)) {
-			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticación para DNIe");
+			logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::Encontrado alias de autenticaciï¿½n para DNIe");
 			return CertificadoDNIe.ALIAS_PKCS11_AUTENTICACION;
 		}
+		if (customAliases != null && customAliases.getAuthenticationAlias() != null){
+			if (lAlias.contains(customAliases.getAuthenticationAlias())){
+				logger.debug ("[KeyStoremanager.getSignatureAlias]::Encontrado alias de autenticaciï¿½n para customAlias");
+				return customAliases.getAuthenticationAlias();
+			}
+		}
 		
-		logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::No se ha encontrado ningún alias conocido. Se devuelve el primero::" + aliases[0]);
+		logger.debug ("[Pkcs11Manager.getAuthenticationAlias]::No se ha encontrado ningï¿½n alias conocido. Se devuelve el primero::" + aliases[0]);
 		return aliases[0];
 	}
 
