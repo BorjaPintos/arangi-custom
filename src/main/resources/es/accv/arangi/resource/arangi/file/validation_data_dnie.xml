@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validation-data>
+	<!-- DNI electrónico -->
+	<ca common-name="AC DNIE 001">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 002">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 003">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 004">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 005">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 006">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC RAIZ DNIE">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+</validation-data>

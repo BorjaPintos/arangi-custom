@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<validation-data>
+	<!-- ACCV - Test -->
+	<ca common-name="CATEST">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsptest.accv.es:8086</url>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="SUB_CA_WINDOWS3">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsptest.accv.es:8086</url>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="Root TEST EJBCA">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsptest.accv.es:8086</url>
+			</ocsp>
+		</ocsps>
+	</ca>
+	
+	<!-- DNI electrónico -->
+	<ca common-name="AC DNIE 001">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 002">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 003">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 004">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 005">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC DNIE 006">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+	<ca common-name="AC RAIZ DNIE">
+		<ocsps>
+			<ocsp>
+				<url>http://ocsp.dnie.es</url>
+			</ocsp>
+			<ocsp>
+				<url>http://afirma.redinteradministrativa.es/servidorOcsp/servidorOCSP</url>
+				<requestor_name>gv.accv</requestor_name>
+			</ocsp>
+		</ocsps>
+	</ca>
+</validation-data>
